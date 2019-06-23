@@ -4,6 +4,7 @@ import './App.css';
 import Button from './components/Button';
 import UserTable from './components/userTable';
 import AddUserForm from './components/AddUserForm';
+import EditForm from './components/EditForm';
 
 function App() {
   const usersData = [{ id: 1, name: 'Tania', username: 'floppydiskette' },{ id: 2, name: 'Craig', username: 'siliconeidolon' },{ id: 3, name: 'Ben', username: 'benisphere' }]
@@ -34,11 +35,16 @@ function App() {
     setUsers([...userData]);
   }
 
-  // const updateUser = (id, updatedUser) => {
-  //   setEditing(false)
+  const editUser=index=>{
+    setEditing(true);
+    setCurrentUser(users[index]);
+  }
+
+  const updateUser = (id, updatedUser) => {
+    setEditing(false)
   
-  //   setUsers(users.map(user => (user.id === id ? updatedUser : user)))
-  // }
+    setUsers(users.map(user => (user.id === id ? updatedUser : user)))
+  }
 
  
   return (
@@ -48,11 +54,20 @@ function App() {
         <Button/>
         <div style={{display:'flex',flexDirection:'row',width:'100%'}}>
           <div style={{width:'42%',marginHorizontal:'4%'}}>
-          <h2>Add user</h2>
-          <AddUserForm addUser={addUser} />
+            {editing?
+              <div>
+                <EditForm updateUser={updateUser} user={currentUser}/>
+              </div>
+              :
+              <div>
+                 <h2>Add user</h2>
+                 <AddUserForm addUser={addUser} />
+              </div>
+              }
+         
         </div>
         <div style={{width:'50%',marginHorizontal:'1%'}}>
-          <UserTable users={users}  delete={deleteUser}/>
+          <UserTable users={users}  delete={deleteUser} edit={editUser}/>
         </div>
         </div>
       </header>
